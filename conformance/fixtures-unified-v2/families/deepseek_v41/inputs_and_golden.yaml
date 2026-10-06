@@ -21,7 +21,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -94,7 +94,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -160,7 +160,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -229,7 +229,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -306,7 +306,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -373,7 +373,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -450,7 +450,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -527,7 +527,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -627,7 +627,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -712,7 +712,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -805,7 +805,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -901,7 +901,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -981,7 +981,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1062,7 +1062,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1135,7 +1135,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1233,7 +1233,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1322,7 +1322,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1397,7 +1397,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1478,7 +1478,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1559,7 +1559,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1646,7 +1646,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1728,7 +1728,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1810,7 +1810,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -1943,7 +1943,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2012,7 +2012,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2082,7 +2082,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2139,10 +2139,10 @@ cases:
           city: a > b
   retired__30_14:
     lifecycle: retired
-    scenario: null
-    description: null
+    scenario:
+    description:
     policy: []
-    display_id: null
+    display_id:
     historical_ids:
     - UNIFIED.30-14
     request:
@@ -2150,7 +2150,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2199,7 +2199,7 @@ cases:
       - delta_text: '<｜DSML｜ invoke name="get_weather"[{"name": "get_weather", "arguments": {"city": "a >'
       - delta_text: ' b"}}]'
       - delta_text: ‹finish›
-    golden: null
+    golden:
   guided_json_required_tool:
     lifecycle: active
     scenario: guided_json_required_tool
@@ -2213,7 +2213,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2280,7 +2280,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2418,7 +2418,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2488,7 +2488,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2561,7 +2561,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2630,7 +2630,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2695,7 +2695,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2760,7 +2760,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2814,10 +2814,10 @@ cases:
         text: '[{"name": "get_weather", "arguments": {"city": "Paris"}}, {"arguments": {"city": "Tokyo"}}]'
   retired__31_33:
     lifecycle: retired
-    scenario: null
-    description: null
+    scenario:
+    description:
     policy: []
-    display_id: null
+    display_id:
     historical_ids:
     - UNIFIED.31-33
     request:
@@ -2825,7 +2825,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2882,7 +2882,7 @@ cases:
       - delta_text: </think>
       - delta_text: '[{"name": "get_weather", "arguments": {"city": "Paris"}}]'
       - delta_text: ‹finish›
-    golden: null
+    golden:
   guided_json_list_with_broken_element:
     lifecycle: active
     scenario: guided_json_list_with_broken_element
@@ -2896,7 +2896,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -2950,10 +2950,10 @@ cases:
         text: '[{"name": "get_weather", "arguments": {"city": "Paris"}}, {"name": "run", "arguments": {"cmd": ]'
   retired__31_40:
     lifecycle: retired
-    scenario: null
-    description: null
+    scenario:
+    description:
     policy: []
-    display_id: null
+    display_id:
     historical_ids:
     - UNIFIED.31-40
     request:
@@ -2961,7 +2961,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3020,7 +3020,7 @@ cases:
       - delta_text: </think>
       - delta_text: '[{"name": "get_weather", "arguments": {"city": "Paris"}}]'
       - delta_text: ‹finish›
-    golden: null
+    golden:
   guided_json_tool_open_before_payload:
     lifecycle: active
     scenario: guided_json_tool_open_before_payload
@@ -3035,7 +3035,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3104,7 +3104,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3173,7 +3173,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3243,7 +3243,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3313,7 +3313,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3383,7 +3383,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3450,7 +3450,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3518,7 +3518,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3584,7 +3584,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3651,7 +3651,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3719,7 +3719,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3785,7 +3785,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3852,7 +3852,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3920,7 +3920,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -3986,7 +3986,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4059,7 +4059,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4135,7 +4135,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4204,7 +4204,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4277,7 +4277,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4351,7 +4351,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: tool_calls
       tools:
       - name: get_weather
@@ -4425,7 +4425,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: tool_calls
       tools:
       - name: get_weather
@@ -4498,7 +4498,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: tool_calls
       tools:
       - name: get_weather
@@ -4572,7 +4572,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: tool_calls
       tools:
       - name: get_weather
@@ -4645,7 +4645,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4710,7 +4710,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4775,7 +4775,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4853,7 +4853,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -4925,7 +4925,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5006,7 +5006,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5075,7 +5075,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5154,7 +5154,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: length
       tools:
       - name: get_weather
@@ -5225,7 +5225,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5296,7 +5296,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5363,7 +5363,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5418,10 +5418,10 @@ cases:
         text: 'I will check that. '
   retired__50_1:
     lifecycle: retired
-    scenario: null
-    description: null
+    scenario:
+    description:
     policy: []
-    display_id: null
+    display_id:
     historical_ids:
     - UNIFIED.50-1
     request:
@@ -5429,7 +5429,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5481,7 +5481,7 @@ cases:
       - delta_text: </think>
       - delta_text: '<｜DSML｜ invoke name="[{"name": "get_weather", "arguments": {"city": "Paris"}}]'
       - delta_text: ‹finish›
-    golden: null
+    golden:
   prefilled_response_reasoning_markers_literal:
     lifecycle: active
     scenario: prefilled_response_reasoning_markers_literal
@@ -5496,7 +5496,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5576,7 +5576,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5645,7 +5645,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5718,7 +5718,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5793,7 +5793,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5876,7 +5876,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -5953,7 +5953,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6029,7 +6029,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6108,7 +6108,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6195,7 +6195,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6285,15 +6285,15 @@ cases:
           y: '2'
   retired__muse_1:
     lifecycle: retired
-    scenario: null
-    description: null
+    scenario:
+    description:
     policy: []
-    display_id: null
+    display_id:
     historical_ids:
     - UNIFIED.31-26
     - UNIFIED.muse-1
-    request: null
-    golden: null
+    request:
+    golden:
   qwen_string_null:
     lifecycle: active
     scenario: arg_json_null
@@ -6307,7 +6307,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6332,7 +6332,7 @@ cases:
       - kind: tool_call
         name: get_weather
         arguments:
-          city: null
+          city:
   arg_string_null:
     lifecycle: active
     scenario: arg_string_null
@@ -6346,7 +6346,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6383,7 +6383,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6408,7 +6408,7 @@ cases:
       - kind: tool_call
         name: get_weather
         arguments:
-          city: null
+          city:
   arg_json_null_const:
     lifecycle: active
     scenario: arg_json_null_const
@@ -6422,7 +6422,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6431,7 +6431,7 @@ cases:
           properties:
             city:
               anyOf:
-              - const: null
+              - const:
               - type: string
       chunks:
       - delta_text: <｜DSML｜ calls>
@@ -6447,7 +6447,7 @@ cases:
       - kind: tool_call
         name: get_weather
         arguments:
-          city: null
+          city:
   arg_json_null_nullable:
     lifecycle: active
     scenario: arg_json_null_nullable
@@ -6461,7 +6461,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6485,7 +6485,7 @@ cases:
       - kind: tool_call
         name: get_weather
         arguments:
-          city: null
+          city:
   arg_json_null_oneof:
     lifecycle: active
     scenario: arg_json_null_oneof
@@ -6499,7 +6499,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6524,7 +6524,7 @@ cases:
       - kind: tool_call
         name: get_weather
         arguments:
-          city: null
+          city:
   arg_string_null_const:
     lifecycle: active
     scenario: arg_string_null_const
@@ -6538,7 +6538,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6577,7 +6577,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6588,7 +6588,7 @@ cases:
               type: string
               enum:
               - 'null'
-              - null
+              -
       chunks:
       - delta_text: <｜DSML｜ calls>
       - delta_text: <｜DSML｜ invoke name="get_weather">
@@ -6617,7 +6617,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6657,7 +6657,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6699,7 +6699,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6738,7 +6738,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6780,7 +6780,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: bad
@@ -6824,7 +6824,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6892,7 +6892,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -6962,7 +6962,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7030,7 +7030,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7098,7 +7098,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7177,7 +7177,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7326,7 +7326,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7400,7 +7400,7 @@ cases:
       init:
         starting_state: Reasoning
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7468,7 +7468,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7606,7 +7606,7 @@ cases:
       init:
         starting_state: Response
         tool_output_mode: GuidedJson
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: get_weather
@@ -7677,7 +7677,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -7733,7 +7733,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -7791,7 +7791,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -7858,7 +7858,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -7902,7 +7902,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -7992,7 +7992,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -8049,7 +8049,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: capture_payload
@@ -8098,7 +8098,7 @@ cases:
       init:
         starting_state: None
         tool_output_mode: Native
-        named_tool: null
+        named_tool:
       finish_reason: stop
       tools:
       - name: inspect
@@ -8158,3 +8158,255 @@ cases:
       - kind: tool_call
         name: done
         arguments: {}
+  arg_numeric_15_exponent:
+    lifecycle: active
+    scenario: arg_numeric_15_exponent
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input 9.0071992547409925e15; expected 9.0071992547409925e15.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.exponent
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">9.0071992547409925e15</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: 9.0071992547409925e15
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":9.0071992547409925e15}'
+  arg_numeric_15_negative:
+    lifecycle: active
+    scenario: arg_numeric_15_negative
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input -9007199254740992.5; expected -9007199254740992.5.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.negative
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">-9007199254740992.5</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: '-9007199254740992.5'
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":-9007199254740992.5}'
+  arg_numeric_15_ordinary:
+    lifecycle: active
+    scenario: arg_numeric_15_ordinary
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input 42.5; expected 42.5.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.ordinary
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">42.5</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: '42.5'
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":42.5}'
+  arg_numeric_15_quarter:
+    lifecycle: active
+    scenario: arg_numeric_15_quarter
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input 9007199254740993.25; expected 9007199254740993.25.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.quarter
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">9007199254740993.25</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: '9007199254740993.25'
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":9007199254740993.25}'
+  arg_numeric_15_round_down:
+    lifecycle: active
+    scenario: arg_numeric_15_round_down
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input 9007199254740992.5; expected 9007199254740992.5.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.round_down
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">9007199254740992.5</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: '9007199254740992.5'
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":9007199254740992.5}'
+  arg_numeric_15_round_up:
+    lifecycle: active
+    scenario: arg_numeric_15_round_up
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input 9007199254740993.1; expected 9007199254740993.1.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.round_up
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">9007199254740993.1</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: '9007199254740993.1'
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":9007199254740993.1}'
+  arg_numeric_15_small:
+    lifecycle: active
+    scenario: arg_numeric_15_small
+    description: 'Fractional numeric preservation: native number syntax preserves ordinary fractions, upward/downward rounding boundaries, negative values, and exponent notation. See numeric-failures.md. Input 0.10000000000000000001; expected 0.10000000000000000001.'
+    policy:
+    - I7
+    display_id: UNIFIED.7-15.small
+    historical_ids: []
+    request:
+      input: <｜DSML｜ calls><｜DSML｜ invoke name="get_weather"><｜DSML｜ parameter name="value" string="false">0.10000000000000000001</｜DSML｜ parameter></｜DSML｜ invoke></｜DSML｜ calls>
+      init:
+        starting_state: None
+        tool_output_mode: Native
+        named_tool:
+      finish_reason: stop
+      tools:
+      - name: get_weather
+        parameters:
+          type: object
+          properties:
+            value:
+              type: number
+      chunks:
+      - delta_text: <｜DSML｜ calls>
+      - delta_text: <｜DSML｜ invoke name="get_weather">
+      - delta_text: <｜DSML｜ parameter name="value" string="false">
+      - delta_text: '0.10000000000000000001'
+      - delta_text: </｜DSML｜ parameter>
+      - delta_text: </｜DSML｜ invoke>
+      - delta_text: </｜DSML｜ calls>
+      - delta_text: ‹finish›
+    golden:
+      assembled:
+      - kind: tool_call
+        name: get_weather
+        arguments: '{"value":0.10000000000000000001}'
