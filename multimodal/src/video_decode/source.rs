@@ -62,7 +62,7 @@ pub(super) struct SourceReader<'a> {
 
 /// The first failed read of a [`SourceReader`], kept outside it: a parser
 /// that owns the reader may take a failed read for the end of the file
-/// (`matroska-demuxer` does, on an element header), so the caller checks
+/// (libavformat may), so the caller checks
 /// this after parsing rather than trusting the parser to report it.
 #[derive(Clone, Default)]
 pub(super) struct ReadFailure(Rc<RefCell<Option<io::Error>>>);

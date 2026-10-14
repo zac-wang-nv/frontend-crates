@@ -6,8 +6,8 @@
 //! A keyframe needs no earlier packet, so a sampled frame needs only the
 //! packets from the last keyframe before it. A decode is planned as runs of
 //! packets, each starting at a keyframe, and the packets between runs are
-//! never decoded (in MP4 never read either, unless the track may carry
-//! parameter sets in its samples; see below). Only whole groups of pictures
+//! never decoded (nor, in MP4, read again after demuxing, unless the track
+//! may carry parameter sets in its samples; see below). Only whole groups of pictures
 //! without a sampled frame are skipped: neighbouring groups that both hold
 //! one decode straight through.
 //!
@@ -566,7 +566,7 @@ mod tests {
     }
 
     #[test]
-    fn mp4_without_stss_marks_every_sample_and_an_empty_one_none() {
+    fn mp4_without_stss_marks_every_sample_and_an_empty_one_the_first() {
         let fixture_bytes = fixture("gop_h264.mp4");
         let at = fixture_bytes.windows(4).position(|w| w == b"stss").unwrap();
         let sync = |bytes: &[u8]| -> Vec<bool> {
@@ -581,10 +581,11 @@ mod tests {
         let mut bytes = fixture_bytes.clone();
         bytes[at..at + 4].copy_from_slice(b"free");
         assert!(sync(&bytes).iter().all(|&s| s));
-        // An empty one: none.
+        // An empty one: only the first (FFmpeg's reading).
         let mut bytes = fixture_bytes.clone();
         bytes[at + 8..at + 12].copy_from_slice(&0u32.to_be_bytes());
-        assert!(sync(&bytes).iter().all(|&s| !s));
+        let marks = sync(&bytes);
+        assert!(marks[0] && marks[1..].iter().all(|&s| !s));
     }
 
     #[test]

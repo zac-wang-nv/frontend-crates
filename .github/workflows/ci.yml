@@ -90,8 +90,27 @@ jobs:
 
       # video_decode loads libvpx at runtime for VP8/VP9 on the CPU; its tests
       # decode with it (runners have no GPU, so NVDEC's tests are ignored).
+      # nasm builds the libvpx that FFmpeg links, below.
       - name: Install libvpx
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libvpx9
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libvpx9 nasm
+
+      # video_decode demuxes through libavformat: the LGPL-only FFmpeg Dynamo
+      # builds in-tree, rebuilt only when the build script changes.
+      - name: Cache FFmpeg
+        id: ffmpeg-cache
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+        with:
+          path: ~/ffmpeg-dynamo
+          key: ${{ runner.os }}-ffmpeg-dynamo-${{ hashFiles('multimodal/scripts/build-ffmpeg.sh') }}
+
+      - name: Build FFmpeg
+        if: steps.ffmpeg-cache.outputs.cache-hit != 'true'
+        run: multimodal/scripts/build-ffmpeg.sh ~/ffmpeg-dynamo
+
+      - name: Use FFmpeg
+        run: |
+          echo "PKG_CONFIG_PATH=$HOME/ffmpeg-dynamo/lib/pkgconfig" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$HOME/ffmpeg-dynamo/lib" >> "$GITHUB_ENV"
 
       - name: Run multimodal tests with all features
         run: cargo test -p dynamo-multimodal --all-targets --all-features --locked

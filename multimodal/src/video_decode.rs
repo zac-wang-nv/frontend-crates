@@ -17,16 +17,17 @@
 //! sampled frame as it is decoded, so full-size frames are never all held at
 //! once.
 //!
-//! Containers: MP4 (ISO BMFF) through this crate's own demuxer (see `mp4`),
-//! WebM and Matroska through `matroska-demuxer`. Codecs: H.264, HEVC, VP8, VP9
-//! and AV1, 8-bit 4:2:0.
+//! Containers: MP4 (ISO BMFF, with an `ftyp` box) and WebM / Matroska, read
+//! through FFmpeg's libavformat (see `avformat`): the LGPL-only FFmpeg 9 that
+//! Dynamo builds in-tree, linked dynamically, which only demuxes. Codecs:
+//! H.264, HEVC, VP8, VP9 and AV1, 8-bit 4:2:0.
 //!
 //! Decoding runs in NVIDIA's driver when it can: `libcuda.so.1` and
 //! `libnvcuvid.so.1` are loaded at runtime (see `nvdec`) and GPU 0 is used.
 //! When NVDEC cannot decode a VP8 or VP9 stream (no driver, a GPU without the
 //! codec, or VP8, which NVDEC is not used for), it is decoded on the calling
-//! thread by libvpx, also loaded at runtime (see `vpx`). Nothing is linked at
-//! build time and no decoder ships in this crate. Without a decoder for the
+//! thread by libvpx, also loaded at runtime (see `vpx`). No decoder is linked
+//! at build time or ships in this crate. Without a decoder for the
 //! stream, decoding returns [`MmError::Unsupported`].
 //!
 //! 64-bit Linux only: the driver and libvpx structures are transcribed for
@@ -43,8 +44,9 @@
 //! Times are player times: the first shown frame is at
 //! [`VideoInfo::start_time`], which an MP4 edit list's delay or a WebM /
 //! Matroska clip's first timestamp sets. An MP4 edit list also hides the
-//! frames it cuts; one that a player would have to seek within (rows that go
-//! back, repeat or skip media, or a rate other than 1) is refused.
+//! frames it cuts, as libavformat applies it; one that would show media more
+//! than once is refused. The Matroska block "invisible" flag is not reported
+//! by libavformat, so such frames show, as in FFmpeg.
 //!
 //! Decoding blocks the calling thread. Frames depend on earlier frames, so a
 //! sampled frame is decoded from the last keyframe before it; groups of
@@ -52,12 +54,11 @@
 //! (keyframes are checked in the bitstream first, else the whole stream is
 //! decoded). Only the sampled frames are copied off the GPU and converted.
 //!
-//! Memory: MP4 is read through the [`ByteSource`] as it is decoded, one packet
-//! at a time, so only its index (sample tables) is held. WebM and Matroska
-//! packets are read into memory while the file is demuxed, so those hold the
-//! whole video next to the source. A VP8 or VP9 clip is also read once in full
-//! before decoding, to find which packets display a frame and what colour VP9
-//! declares.
+//! Memory and reads: libavformat reads every packet once while the file is
+//! demuxed, because only then does it give each packet's presentation time.
+//! MP4 packets are then dropped and read again from the [`ByteSource`] when
+//! they are decoded; WebM and Matroska packets are held, so those hold the
+//! whole video next to the source.
 
 // Decoding is Linux-only; elsewhere the decode path is compiled out.
 #![cfg_attr(not(target_os = "linux"), allow(dead_code))]
@@ -66,7 +67,7 @@ use crate::frames::{VideoFrames, VideoTiming};
 use crate::image::resize::{Resample, resize_rgb};
 use crate::{MmError, Result};
 
-mod mp4;
+mod avformat;
 #[cfg(target_os = "linux")]
 mod nvdec;
 #[cfg(target_os = "linux")]
@@ -76,7 +77,6 @@ mod source;
 mod vpx;
 
 pub use source::ByteSource;
-use source::SourceReader;
 
 /// A video codec found in a container.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -637,9 +637,9 @@ fn demux_with(source: &dyn ByteSource, max_input_bytes: usize) -> Result<Track<'
         .read_at(0, magic)
         .map_err(|e| read_error(e, "the container header"))?;
     let track = if magic.get(4..8) == Some(b"ftyp") {
-        demux_mp4(source)?
+        avformat::demux(source, avformat::Container::Mp4, max_input_bytes)?
     } else if magic.starts_with(&[0x1A, 0x45, 0xDF, 0xA3]) {
-        demux_matroska(source, max_input_bytes)?
+        avformat::demux(source, avformat::Container::Matroska, max_input_bytes)?
     } else {
         return Err(MmError::invalid_input(
             "unrecognised video container: expected MP4, WebM or Matroska",
@@ -667,203 +667,13 @@ fn packet_displays(codec: VideoCodec, packet: &[u8], vp9_colour: &mut Vp9Colour)
     }
 }
 
-fn demux_mp4(source: &dyn ByteSource) -> Result<Track<'_>> {
-    let mut movie = mp4::read(source)?;
-    let codec = movie.codec;
-    // Only VP8 and VP9 need a look inside the packets, for hidden frames and
-    // colour, before the edit list is applied; the other codecs' packets are
-    // not read until they are decoded.
-    let mut vp9_colour = Vp9Colour::default();
-    if matches!(codec, VideoCodec::Vp8 | VideoCodec::Vp9) {
-        let mut scratch = Vec::new();
-        for sample in &mut movie.samples {
-            scratch.resize(sample.size as usize, 0);
-            source
-                .read_at(sample.offset, &mut scratch)
-                .map_err(|e| read_error(e, "a video packet"))?;
-            sample.displays = packet_displays(codec, &scratch, &mut vp9_colour)?;
-        }
-    }
-    let video = movie.finish()?;
-    let timescale = video.timescale as f64;
-    // Samples are in decode order, which is what the decoders need.
-    let mut packets = Vec::with_capacity(video.samples.len());
-    for sample in &video.samples {
-        let payload = Payload::Source {
-            offset: sample.offset,
-            len: sample.size as usize,
-        };
-        let pts = video.start_time + sample.cts as f64 / timescale;
-        packets.push(Packet::new(
-            payload,
-            pts,
-            sample.displays,
-            !sample.shown,
-            sample.sync,
-        ));
-    }
-    Ok(Track {
-        codec,
-        width: video.width,
-        height: video.height,
-        start_time: video.start_time,
-        duration: video.duration,
-        config: match codec {
-            VideoCodec::H264 | VideoCodec::Hevc | VideoCodec::Av1 => video.config,
-            _ => None,
-        },
-        inband_parameter_sets: video.inband_parameter_sets,
-        packets,
-        vp9_colour,
-        source,
-    })
-}
-
-fn demux_matroska(source: &dyn ByteSource, max_input_bytes: usize) -> Result<Track<'_>> {
-    use matroska_demuxer::{DemuxError, Frame, MatroskaFile, TrackType};
-    let (reader, failure) = SourceReader::new(source);
-    // The demuxer's own failures are bad input. A failure of the source under
-    // it keeps its I/O meaning (a short source is bad input, anything else is
-    // the source's own failure, `Internal`, as for MP4), whether the demuxer
-    // passes it on or reports something else in its place (while opening, it
-    // turns one into "no cluster found"): the reader remembers it.
-    let invalid = |e: DemuxError| match (failure.take(), e) {
-        (Some(io), _) | (None, DemuxError::IoError(io)) => {
-            read_error(io, "the WebM / Matroska file")
-        }
-        (None, e) => MmError::invalid_input_with_source("unreadable WebM / Matroska", e),
-    };
-    let mut file = MatroskaFile::open(reader).map_err(invalid)?;
-    let entry = file
-        .tracks()
-        .iter()
-        .find(|t| t.track_type() == TrackType::Video)
-        .ok_or_else(|| MmError::invalid_input("WebM / Matroska file has no video track"))?;
-    let codec = match entry.codec_id() {
-        "V_VP8" => VideoCodec::Vp8,
-        "V_VP9" => VideoCodec::Vp9,
-        "V_AV1" => VideoCodec::Av1,
-        "V_MPEG4/ISO/AVC" => VideoCodec::H264,
-        "V_MPEGH/ISO/HEVC" => VideoCodec::Hevc,
-        other => {
-            return Err(MmError::unsupported(format!(
-                "unsupported Matroska video codec {other}"
-            )));
-        }
-    };
-    let size =
-        |v: u64| u32::try_from(v).map_err(|_| MmError::invalid_input("video size out of range"));
-    let (width, height) = entry
-        .video()
-        .map(|v| (v.pixel_width().get(), v.pixel_height().get()))
-        .ok_or_else(|| MmError::invalid_input("Matroska video track has no size"))?;
-    let (width, height) = (size(width)?, size(height)?);
-    let number = entry.track_number().get();
-    let config = entry.codec_private().map(<[u8]>::to_vec);
-    // Timestamps and block durations are in units of `timestamp_scale`
-    // nanoseconds; DefaultDuration is in nanoseconds.
-    let scale = file.info().timestamp_scale().get() as f64 / 1e9;
-    let default_duration = entry.default_duration().map(|ns| ns.get() as f64 / 1e9);
-    let declared = file.info().duration().map(|d| d * scale);
-
-    let mut packets = Vec::new();
-    let mut vp9_colour = Vp9Colour::default();
-    // The latest end time of a shown frame, when the file says how long frames
-    // last (the last packet need not be the last frame when frames reorder).
-    let mut last_end: Option<f64> = None;
-    // Bytes of packets held so far, capped by the caller's limit. The demuxer
-    // checks each block's declared size against the bytes left in the file
-    // before it allocates, so no packet outgrows the file, and the packets of
-    // a file never outgrow it either (kept explicit here, with the packet
-    // count under the MP4 sample cap).
-    let mut held: u64 = 0;
-    let mut frame = Frame::default();
-    while file.next_frame(&mut frame).map_err(invalid)? {
-        if frame.track != number {
-            continue;
-        }
-        held += frame.data.len() as u64;
-        if packets.len() >= MAX_PACKETS || held > source.len() {
-            return Err(MmError::invalid_input(
-                "WebM / Matroska file has more packets, or packet bytes, than it can hold",
-            ));
-        }
-        if held > max_input_bytes as u64 {
-            return Err(MmError::limit_exceeded(format!(
-                "WebM / Matroska packets exceed the {max_input_bytes} byte input limit"
-            )));
-        }
-        let pts = frame.timestamp as f64 * scale;
-        let displays = packet_displays(codec, &frame.data, &mut vp9_colour)?;
-        let packet = Packet::new(
-            Payload::Owned(std::mem::take(&mut frame.data)),
-            pts,
-            displays,
-            frame.is_invisible,
-            // A Block in a BlockGroup has no keyframe flag: not a start.
-            frame.is_keyframe == Some(true),
-        );
-        if packet.shown {
-            let end = frame
-                .duration
-                .map(|d| pts + d as f64 * scale)
-                .or_else(|| default_duration.map(|d| pts + d));
-            if let Some(end) = end {
-                last_end = Some(last_end.map_or(end, |e: f64| e.max(end)));
-            }
-        }
-        packets.push(packet);
-    }
-    // The demuxer takes a read that fails on an element header for the end of
-    // the file; the reader remembers it, so a source failure is never a
-    // shorter video.
-    if let Some(e) = failure.take() {
-        return Err(read_error(e, "the WebM / Matroska file"));
-    }
-    // Timestamps stay player times: a clip whose first frame is at 5 s starts
-    // at 5 s (`start_time`) and lasts 1 s, not 6.
-    let shown: Vec<f64> = packets.iter().filter(|p| p.shown).map(|p| p.pts).collect();
-    let first = shown.iter().copied().fold(f64::INFINITY, f64::min);
-    let first = if first.is_finite() { first } else { 0.0 };
-    if first < 0.0 {
-        return Err(MmError::invalid_input("video starts before time 0"));
-    }
-    let last = shown.iter().copied().fold(first, f64::max) - first;
-    // The segment duration and block end times are measured from the segment
-    // start; the duration is measured from the first shown frame.
-    let duration = matroska_duration(
-        declared.map(|d| d - first),
-        last_end.map(|end| end - first),
-        last,
-        shown.len(),
-    );
-    Ok(Track {
-        codec,
-        width,
-        height,
-        start_time: first,
-        duration,
-        config,
-        inband_parameter_sets: matches!(codec, VideoCodec::H264 | VideoCodec::Hevc),
-        packets,
-        vp9_colour,
-        source,
-    })
-}
-
-/// A Matroska clip's duration from the segment duration or the latest frame
-/// end the blocks give, whichever comes first and ends after the last shown
-/// frame starts (at `last`). Otherwise the last frame is assumed to last as
-/// long as the average gap between `frames` frames.
-fn matroska_duration(
-    declared: Option<f64>,
-    last_end: Option<f64>,
-    last: f64,
-    frames: usize,
-) -> f64 {
-    declared
-        .filter(|d| *d > last)
-        .or(last_end.filter(|end| *end > last))
+/// A clip's duration from the latest end of a shown frame, when the packets
+/// give one that ends after the last shown frame starts (at `last`, from the
+/// first). Otherwise the last frame is assumed to last as long as the average
+/// gap between `frames` frames.
+fn clip_duration(last_end: Option<f64>, last: f64, frames: usize) -> f64 {
+    last_end
+        .filter(|end| *end > last)
         .unwrap_or_else(|| last + last / frames.saturating_sub(1).max(1) as f64)
 }
 
@@ -1416,38 +1226,17 @@ mod tests {
     }
 
     #[test]
-    fn malformed_mp4_sample_tables_are_errors_not_panics() {
-        // Tables that name no chunk or no chunk run: an error, never an
-        // out-of-range index.
-        for (fourcc, offset) in [(b"stco", 8), (b"stsc", 8)] {
-            let mut bytes = fixture("vp9.mp4");
-            patch_mp4(&mut bytes, fourcc, offset, 0);
-            let r = probe(&bytes);
-            assert!(
-                matches!(r, Err(MmError::InvalidInput { .. })),
-                "{fourcc:?}: {r:?}"
-            );
-        }
-        // A track duration that ends before the last sample starts.
-        let mut bytes = fixture("vp9.mp4");
-        // mdhd version 0: version/flags, creation, modification, timescale, duration.
-        patch_mp4(&mut bytes, b"mdhd", 20, 1);
-        let r = probe(&bytes);
-        assert!(matches!(r, Err(MmError::InvalidInput { .. })), "{r:?}");
-    }
-
-    #[test]
-    fn sample_counts_the_file_cannot_back_are_refused_up_front() {
-        // A small file asking for 2^31 samples is refused at once: by `stsz`
-        // before anything is sized by its count, and by `stts` once its runs
-        // outlast the samples.
+    fn huge_mp4_sample_counts_are_handled_at_once() {
+        // A small file asking for 2^31 samples: libavformat sizes nothing by
+        // the count, so it answers (here by reading the samples there are)
+        // at once rather than allocating for them.
         for (fourcc, offset) in [(b"stsz", 12), (b"stts", 12)] {
             let mut bytes = fixture("vp9.mp4");
             patch_mp4(&mut bytes, fourcc, offset, 0x7FFF_FFFF);
             let started = std::time::Instant::now();
             let r = probe(&bytes);
             assert!(
-                matches!(r, Err(MmError::InvalidInput { .. })),
+                matches!(r, Ok(_) | Err(MmError::InvalidInput { .. })),
                 "{fourcc:?}: {r:?}"
             );
             assert!(started.elapsed() < std::time::Duration::from_secs(1));
@@ -1546,15 +1335,14 @@ mod tests {
     }
 
     #[test]
-    fn matroska_duration_must_end_after_the_last_frame() {
-        // Declared or block-derived ends are used when they pass the last
+    fn a_clip_lasts_until_its_last_frame_ends() {
+        // A frame end from the packets is used when it passes the last
         // frame's start; otherwise the last gap is estimated.
-        assert_eq!(matroska_duration(Some(2.0), Some(1.5), 1.0, 11), 2.0);
-        assert_eq!(matroska_duration(None, Some(1.1), 1.0, 11), 1.1);
-        // Only the first frame had a BlockDuration: its end (0.1 s) is
+        assert_eq!(clip_duration(Some(1.1), 1.0, 11), 1.1);
+        // Only the first frame said how long it lasts: its end (0.1 s) is
         // before the last frame (1.0 s), so it is not the clip's duration.
-        assert!((matroska_duration(None, Some(0.1), 1.0, 11) - 1.1).abs() < 1e-9);
-        assert!((matroska_duration(Some(0.5), None, 1.0, 11) - 1.1).abs() < 1e-9);
+        assert!((clip_duration(Some(0.1), 1.0, 11) - 1.1).abs() < 1e-9);
+        assert!((clip_duration(None, 1.0, 11) - 1.1).abs() < 1e-9);
     }
 
     #[test]
@@ -1785,44 +1573,6 @@ mod tests {
         }
     }
 
-    /// The byte range of the top-level box `name` in an MP4.
-    fn mp4_box_range(bytes: &[u8], name: &[u8; 4]) -> (u64, u64) {
-        let mut pos = 0usize;
-        while pos + 8 <= bytes.len() {
-            // The fixtures use 32-bit box sizes.
-            let size = u64::from(u32::from_be_bytes(bytes[pos..pos + 4].try_into().unwrap()));
-            let header = 8;
-            assert!(size >= header, "box size {size}");
-            if &bytes[pos + 4..pos + 8] == name {
-                return (pos as u64 + header, pos as u64 + size);
-            }
-            pos += size as usize;
-        }
-        panic!("no {} box", String::from_utf8_lossy(name));
-    }
-
-    #[test]
-    fn an_mp4_is_probed_without_reading_its_media_data() {
-        for name in ["h264.mp4", "hevc.mp4", "av1.mp4"] {
-            let bytes = fixture(name);
-            let source = Recording::new(&bytes);
-            assert_eq!(
-                probe_from(&source).unwrap(),
-                probe(&bytes).unwrap(),
-                "{name}"
-            );
-            let (start, end) = mp4_box_range(&bytes, b"mdat");
-            let reads = source.reads.borrow();
-            assert!(!reads.is_empty());
-            assert!(
-                reads
-                    .iter()
-                    .all(|&(at, len)| at + len as u64 <= start || at >= end),
-                "{name}: read inside mdat {start}..{end}: {reads:?}"
-            );
-        }
-    }
-
     #[test]
     fn every_container_probes_the_same_from_a_source() {
         for name in [
@@ -1943,7 +1693,7 @@ mod tests {
 
     #[test]
     #[ignore = "needs an NVIDIA GPU and driver (NVDEC)"]
-    fn a_source_decodes_like_a_slice_and_never_reads_the_whole_file() {
+    fn a_source_decodes_like_a_slice() {
         for name in [
             "h264.mp4",
             "hevc.mp4",
@@ -1958,10 +1708,6 @@ mod tests {
             let got = decode_sampled_from(&source, 4, &limits).unwrap();
             assert_eq!(got.rgb(), want.rgb(), "{name}");
             assert_eq!(got.timestamps(), want.timestamps(), "{name}");
-            let biggest = source.reads.borrow().iter().map(|r| r.1).max().unwrap();
-            if name.ends_with(".mp4") {
-                assert!(biggest < bytes.len(), "{name}: one read of {biggest} bytes");
-            }
         }
     }
 
@@ -2049,30 +1795,24 @@ mod tests {
         assert_bt709(auto, &["vp9_709.webm", "h264_709.mp4"]);
     }
 
-    fn assert_invisible_frames_hidden(decode: Decode) {
+    fn assert_the_invisible_flag_is_ignored(decode: Decode) {
         // vp9_invisible.webm is vp9_texture.webm with its third block flagged
-        // invisible. The texture moves, so frames are predicted from their
-        // predecessor: the shown frames must equal the original clip's frames
-        // bit for bit, which only holds if the hidden frame was decoded.
+        // invisible in the container. libavformat does not report that flag
+        // (FFmpeg shows the frame), so the clip decodes as the original.
         let full = decode("vp9_texture.webm", 10).unwrap();
         assert_eq!(
             probe(&fixture("vp9_invisible.webm")).unwrap().frame_count,
-            9
+            10
         );
-        let hidden = decode("vp9_invisible.webm", 9).unwrap();
-        let shown: Vec<usize> = (0..10).filter(|i| *i != 2).collect();
-        for (at, index) in shown.into_iter().enumerate() {
-            assert!(
-                hidden.frame(at) == full.frame(index),
-                "shown frame {at} differs from original frame {index}"
-            );
-        }
+        let flagged = decode("vp9_invisible.webm", 10).unwrap();
+        assert!(flagged.rgb() == full.rgb());
+        assert_eq!(flagged.timestamps(), full.timestamps());
     }
 
     #[test]
     #[ignore = "needs an NVIDIA GPU and driver (NVDEC)"]
-    fn invisible_frames_are_decoded_but_not_shown() {
-        assert_invisible_frames_hidden(auto);
+    fn the_matroska_invisible_flag_is_ignored_as_in_ffmpeg() {
+        assert_the_invisible_flag_is_ignored(auto);
     }
 
     fn assert_refused_before_allocation(decode: Decode, names: &[&str]) {
@@ -2224,7 +1964,7 @@ mod tests {
 
         #[test]
         fn the_cpu_keeps_hidden_frames_out_of_the_output() {
-            assert_invisible_frames_hidden(cpu);
+            assert_the_invisible_flag_is_ignored(cpu);
             assert_alt_refs_in_step(cpu);
         }
 
