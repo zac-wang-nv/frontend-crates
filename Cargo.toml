@@ -42,6 +42,10 @@ dynamo-renderer = { path = "renderer", version = "8.0.1" }
 dynamo-tokenizers = { path = "tokenizers", version = "3.1.0" }
 either = { version = "1.13", features = ["serde"] }
 fastokens = "0.3.1"
+# FFI to FFmpeg's libavformat for video demuxing (dynamo-multimodal's
+# `video-decode`). The 9.x major tracks the FFmpeg Dynamo builds in-tree
+# (9.0.1, LGPL-only); see multimodal/scripts/build-ffmpeg.sh.
+ffmpeg-sys-next = { version = "9.0.1", default-features = false, features = ["avformat"] }
 futures = "0.3"
 gif = "0.14"
 hf-hub = { version = "1.0", default-features = false, features = ["rustls-tls"] }
@@ -54,7 +58,6 @@ image = { version = "0.25", default-features = false, features = [
     "bmp",
 ] }
 ipnet = "2"
-matroska-demuxer = "0.8"
 minijinja = { version = "2.24.0" }
 minijinja-contrib = { version = "2.24.0" }
 moka = { version = "0.12" }

@@ -15,7 +15,7 @@ against the mirrored HF processor.
 | ---------- | ------- | ---- |
 | `parallel` | **on**  | links rayon; kernels still run inline until `execution::init_pool` arms the crate-owned pool |
 | `fetch`    | off     | `fetch::MediaFetcher`, a protected http(s)/data: fetcher for untrusted URLs (SSRF policy, redirect revalidation, byte caps); links reqwest and tokio. The trusted-source `fetch_bytes*` helpers in the same module are still stubs |
-| `video-decode` | off | `video_decode`: MP4 / WebM / Matroska demuxing and decoding to RGB frames, through NVDEC or (VP8 / VP9) libvpx, both loaded at runtime; links `matroska-demuxer`. 64-bit Linux only |
+| `video-decode` | off | `video_decode`: MP4 / WebM / Matroska demuxing through FFmpeg's libavformat (links an LGPL-only FFmpeg 9, Dynamo's in-tree build: `scripts/build-ffmpeg.sh`) and decoding to RGB frames, through NVDEC or (VP8 / VP9) libvpx, both loaded at runtime. 64-bit Linux only |
 
 **The boundary.** The crate carries what HF ships, plus what a router and an
 engine must compute *identically* or routing keys and token accounting

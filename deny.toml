@@ -19,6 +19,9 @@ allow = [
     "NCSA",
     "Unicode-3.0",
     "Unicode-DFS-2016",
+    # ffmpeg-sys-next, the FFmpeg bindings behind dynamo-multimodal's
+    # `video-decode` (Dynamo's deny.toml allows it for ffmpeg-next too).
+    "WTFPL",
     "Zlib",
 ]
 
